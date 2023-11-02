@@ -5,10 +5,15 @@ description = `
 `;
 
 characters = [];
+//Wall variables
 let wallColors;
 let wallNumber;
 let powerUp;
 let parallelUp;
+//Ball variables
+let ball;
+let ballSpeed;
+let ballDirection;
 
 options = {
   viewSize: { x: 100, y: 100 },
@@ -20,10 +25,17 @@ function update() {
     wallColors = ["white", "white", "white", "white"];
     wallNumber = 0;
     powerUp = false;
-    parallelUp = true;
+    parallelUp = false;
+    // Initialize the ball
+    ball = { x: 50, y: 50, radius: 5 };
+    ballSpeed = 0.5;
+    ballDirection = { x: 1, y: 1 }; // Initial direction vector of the ball
   }
   OnClick();
-  paintWalls();  
+  paintWalls();
+  moveBall();
+  handleBallCollision();
+  paintBall();  
 
 }
 
@@ -92,17 +104,48 @@ function paintWalls(){
     rect(0, 93, 100, 7);
   }
 
-  //Option 2.
-  // color(wallColors[0]);
-  // rect(0, 0, 7, 150);
-  // //Top wall
-  // color(wallColors[1]);
-  // rect(0, 0, 100, 7);
-  // //Right wall
-  // color(wallColors[2]);
-  // rect(93, 0, 7, 150);
-  // //Bottom wall
-  // color(wallColors[3]);
-  // rect(0, 93, 100, 7);
+}
 
+//Creates the ball with specifications
+function paintBall(){
+  color("black");
+  //Draw the ball
+  arc(ball.x, ball.y, ball.radius * 0.3);
+}
+//moves the ball around based on its speed and direction
+function moveBall(){
+  ball.x += ballSpeed * ballDirection.x;
+  ball.y += ballSpeed * ballDirection.y;
+}
+//Checks if a green wall was hit
+function handleBallCollision() {
+  // Check collision with the screen boundaries (Lose p much)
+  if (ball.x - ball.radius < 0 || ball.x + ball.radius > 100) {
+    end();
+  }
+  if (ball.y - ball.radius < 0 || ball.y + ball.radius > 100) {
+    end();
+  }
+
+  // Check collision with green walls
+  if (wallColors[wallNumber] === "green") {
+    if (
+      (wallNumber === 0 && ball.x - ball.radius <= 7) ||
+      (wallNumber === 2 && ball.x + ball.radius >= 93)
+    ) {
+      increaseScore();
+      ballDirection.x *= -1; // Reverse the x-direction
+    }
+    if (
+      (wallNumber === 1 && ball.y - ball.radius <= 7) ||
+      (wallNumber === 3 && ball.y + ball.radius >= 93)
+    ) {
+      increaseScore();
+      ballDirection.y *= -1; // Reverse the y-direction
+    }
+  }
+}
+
+function increaseScore(){
+  score++;
 }
