@@ -27,9 +27,9 @@ function update() {
     powerUp = false;
     parallelUp = false;
     // Initialize the ball
-    ball = { x: 50, y: 50, radius: 5 };
-    ballSpeed = 0.5;
-    ballDirection = { x: 1, y: 1 }; // Initial direction vector of the ball
+    ball = { x: 50, y: 50, radius: 2 };
+    ballSpeed = 0.7;
+    ballDirection = { x: 0.5, y: 1 }; // Initial direction vector of the ball
   }
   OnClick();
   paintWalls();
@@ -110,7 +110,7 @@ function paintWalls(){
 function paintBall(){
   color("black");
   //Draw the ball
-  arc(ball.x, ball.y, ball.radius * 0.3);
+  arc(ball.x, ball.y, ball.radius * 0.1);
 }
 //moves the ball around based on its speed and direction
 function moveBall(){
