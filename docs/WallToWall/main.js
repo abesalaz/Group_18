@@ -8,6 +8,7 @@ characters = [];
 //Wall variables
 let wallColors;
 let wallNumber;
+let lastWallNumber;
 let powerUp;
 let parallelUp;
 //Ball variables
@@ -24,6 +25,7 @@ function update() {
   if (!ticks) {
     wallColors = ["white", "white", "white", "white"];
     wallNumber = 0;
+    lastWallNumber = 0;
     powerUp = false;
     parallelUp = false;
     // Initialize the ball
@@ -133,15 +135,21 @@ function handleBallCollision() {
       (wallNumber === 0 && ball.x - ball.radius <= 7) ||
       (wallNumber === 2 && ball.x + ball.radius >= 93)
     ) {
-      increaseScore();
-      ballDirection.x *= -1; // Reverse the x-direction
+      if (lastWallNumber != wallNumber) {
+        lastWallNumber = wallNumber;
+        increaseScore();
+        ballDirection.x *= -1; // Reverse the x-direction
+      }
     }
     if (
       (wallNumber === 1 && ball.y - ball.radius <= 7) ||
       (wallNumber === 3 && ball.y + ball.radius >= 93)
     ) {
-      increaseScore();
-      ballDirection.y *= -1; // Reverse the y-direction
+      if (lastWallNumber != wallNumber) {
+        lastWallNumber = wallNumber;
+        increaseScore();
+        ballDirection.y *= -1; // Reverse the y-direction
+      }
     }
   }
 }
