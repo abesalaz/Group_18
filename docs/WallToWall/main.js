@@ -25,7 +25,7 @@ function update() {
   if (!ticks) {
     wallColors = ["white", "white", "white", "white"];
     wallNumber = 0;
-    lastWallNumber = 0;
+    lastWallNumber = -1;
     powerUp = false;
     parallelUp = false;
     // Initialize the ball
