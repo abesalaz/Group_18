@@ -8,8 +8,16 @@ options = {
 //Wall variables
 let powerUp;
 let parallelUp;
+let slowUp;
+let upgradeDurationReset = 3; //power up lasts til score goes up by 3
+let upgradeDuration = 0;
 let balls = [];
 let wallNumbers = [];
+
+//Text variables
+let upgradeText = "Power Up!";
+let textDurationReset = 2 * 60; // 2 second duration
+let textDuration = 0;
 
 function update() {
   if (!ticks) {
@@ -19,6 +27,8 @@ function update() {
     wallNumbers = [0];
     spawnBall();
   }
+
+  powerUpText();
   OnClick();
   paintWalls();
   moveBall();
@@ -35,6 +45,14 @@ function spawnBall() {
     direction: { x: Math.random(), y: Math.random() },
     lastWallNumber: -1
   });
+}
+function powerUpText() {
+  //Displays text if necessary
+  if (textDuration > 0) {
+    color('black');
+    text(upgradeText, 28, 50);
+    textDuration--;
+  }
 }
 
 function OnClick(){
@@ -96,8 +114,8 @@ function moveBall() {
 
     let normalized_x = ball.direction.x / magnitude;
     let normalized_y = ball.direction.y / magnitude;
-    ball.x += ball.speed * normalized_x;
-    ball.y += ball.speed * normalized_y;
+    ball.x += ball.speed * normalized_x * (slowUp ? 0.5 : 1);
+    ball.y += ball.speed * normalized_y * (slowUp ? 0.5 : 1);
   });
 }
 //Checks if a green wall was hit
@@ -115,7 +133,6 @@ function handleBallCollision() {
       if (balls.length == 0) {
         end();
       }
-
     }
 
     // Check collision with green walls
@@ -144,27 +161,50 @@ function increaseScore(){
   score++;
 
   // spawn new ball every 2 points
-  if(score % 2 == 0) {
+  if (score % 2 == 0) {
     spawnBall();
   }
 
-  // reset powerups
-  if (powerUp || parallelUp) {
-    parallelUp = false;
-    powerUp = false;
-    wallNumbers.pop();
+  // see if powerups should be reset
+  if (upgradeDuration > 0) {
+    upgradeDuration--;
+  }
+  if (upgradeDuration === 0) {
+    if (powerUp) {
+      powerUp = false;
+      wallNumbers.pop();
+    }
+
+    if (parallelUp) {
+      parallelUp = false;
+      wallNumbers.pop();
+    }
+
+    if (slowUp) {
+      slowUp = false;
+    }
   }
 
   // power up every 5 points
-  if(score % 5 == 0){
+  if (score % 10 == 0) {
     
     // choose random power up
-    if(Math.random() < 0.5){
+    let randInt = rndi(1, 4); // random number either 1, 2, or 3
+    if (randInt === 1) {
       powerUp = true;
-    } else {
+      upgradeText = "Adjacent!";
+    } 
+    else if (randInt === 2) {
       parallelUp = true;
+      upgradeText = "Parallel!";
     }
-    
+    else {
+      slowUp = true;
+      upgradeText = "Slowwwww!";
+    }
+    // reset text duration to display text for 2 seconds
+    textDuration = textDurationReset;
+    upgradeDuration = upgradeDurationReset;
   }
 
   // apply powerups
