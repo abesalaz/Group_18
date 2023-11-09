@@ -169,7 +169,7 @@ function increaseScore(){
   if (upgradeDuration > 0) {
     upgradeDuration--;
   }
-  if (upgradeDuration === 0) {
+  if (upgradeDuration === 0 && (powerUp || parallelUp || slowUp)) {
     if (powerUp) {
       powerUp = false;
       wallNumbers.pop();
@@ -185,7 +185,7 @@ function increaseScore(){
     }
   }
 
-  // power up every 5 points
+  // power up every 10 points
   if (score % 10 == 0) {
     
     // choose random power up
@@ -193,10 +193,18 @@ function increaseScore(){
     if (randInt === 1) {
       powerUp = true;
       upgradeText = "Adjacent!";
+      let num = wallNumbers[0] + 1;
+      if (num > 3) num -= 4; {
+        wallNumbers.push(num);
+      }
     } 
     else if (randInt === 2) {
       parallelUp = true;
       upgradeText = "Parallel!";
+      let num = wallNumbers[0] + 2;
+      if (num > 3) num -= 4; {
+        wallNumbers.push(num);
+      }
     }
     else {
       slowUp = true;
@@ -206,18 +214,4 @@ function increaseScore(){
     textDuration = textDurationReset;
     upgradeDuration = upgradeDurationReset;
   }
-
-  // apply powerups
-  if (powerUp) {
-    let num = wallNumbers[0] + 1;
-    if (num > 3) num -= 4;
-    wallNumbers.push(num);
-  }
-
-  if (parallelUp) {
-    let num = wallNumbers[0] + 2;
-    if (num > 3) num -= 4;
-    wallNumbers.push(num);
-  }
-
 }
