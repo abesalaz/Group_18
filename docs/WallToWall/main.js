@@ -204,7 +204,7 @@ function increaseScore(){
   if (score % 10 == 0) {
     
     // choose random power up
-    let randInt = rndi(1, 4); // random number either 1, 2, or 3
+    let randInt = rndi(1, 5); // random number either 1, 2, or 3, 4
     if (randInt === 1) {
       powerUp = true;
       upgradeText = "Adjacent!";
