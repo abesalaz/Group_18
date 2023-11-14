@@ -73,28 +73,34 @@ function OnClick(){
 }
 
 function paintWalls(){
-  wallNumbers.forEach((wallNumber) => {
+  wallNumbers.forEach((wallNumber, index) => {
+    let wallColor = "green";
 
+    // Change color to yellow or red when upgradeDuration is 1 or 2
+    if ((powerUp || parallelUp) && index > 0 && upgradeDuration <= 2) {
+      wallColor = (upgradeDuration === 1) ? "red" : "yellow";
+    }
+
+    // Draw the walls based on wallNumber
     if(wallNumber == 0){
-      color("green");
+      color(wallColor);
       rect(0, 0, 7, 150);
     }
     else if (wallNumber == 1){
-      color("green");
+      color(wallColor);
       rect(0, 0, 100, 7);
     }
     else if (wallNumber == 2){
-      color("green");
+      color(wallColor);
       rect(93, 0, 7, 150);
     }
     else if (wallNumber == 3){
-      color("green");
+      color(wallColor);
       rect(0, 93, 100, 7);
     }
-
   });
-
 }
+
 
 //Creates the ball with specifications
 function paintBall(){
