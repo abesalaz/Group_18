@@ -9,6 +9,7 @@ options = {
 let powerUp;
 let parallelUp;
 let slowUp;
+let frenzyUp = false;
 let upgradeDurationReset = 3; //power up lasts til score goes up by 3
 let upgradeDuration = 0;
 let balls = [];
@@ -83,18 +84,22 @@ function paintWalls(){
 
     // Draw the walls based on wallNumber
     if(wallNumber == 0){
+      // @ts-ignore
       color(wallColor);
       rect(0, 0, 7, 150);
     }
     else if (wallNumber == 1){
+      // @ts-ignore
       color(wallColor);
       rect(0, 0, 100, 7);
     }
     else if (wallNumber == 2){
+      // @ts-ignore
       color(wallColor);
       rect(93, 0, 7, 150);
     }
     else if (wallNumber == 3){
+      // @ts-ignore
       color(wallColor);
       rect(0, 93, 100, 7);
     }
@@ -175,7 +180,7 @@ function increaseScore(){
   if (upgradeDuration > 0) {
     upgradeDuration--;
   }
-  if (upgradeDuration === 0 && (powerUp || parallelUp || slowUp)) {
+  if (upgradeDuration === 0 && (powerUp || parallelUp || slowUp || frenzyUp)) {
     if (powerUp) {
       powerUp = false;
       wallNumbers.pop();
@@ -188,6 +193,10 @@ function increaseScore(){
 
     if (slowUp) {
       slowUp = false;
+    }
+
+    if(frenzyUp){
+      frenzyUp = false;
     }
   }
 
@@ -210,6 +219,13 @@ function increaseScore(){
       let num = wallNumbers[0] + 2;
       if (num > 3) num -= 4; {
         wallNumbers.push(num);
+      }
+    }
+    else if(randInt === 3){
+      frenzyUp = true;
+      upgradeText = "Frenzy!";
+      for(let i = 0; i < 5; i++){
+        spawnBall();
       }
     }
     else {
